@@ -1,4 +1,4 @@
-import { hashPassword } from "../utils/auth.js";
+import {generateToken, hashPassword, comparePasswords} from "../utils/auth.js";
 import prisma from "../utils/prismaClient.js";
 
 export const registerUser = async (req, res) => {
@@ -78,3 +78,36 @@ export const confirmCode = async (req, res) => {
     }
 };
 
+export const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Find user by email
+        const user = await prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (!user) {
+            return res.status(400).json({ error: "Invalid email or password" });
+        }
+
+        // Check password
+        const isValid = await comparePasswords(password, user.password);
+        if (!isValid) {
+            return res.status(400).json({ error: "Invalid email or password" });
+        }
+
+        // Optional: check if user has verified their code (if needed)
+        // if (!user.isVerified) {
+        //     return res.status(400).json({ error: "Please verify your email first" });
+        // }
+
+        // Generate JWT token
+        const token = generateToken({ userId: user.id, email: user.email });
+
+        res.json({ message: "Login successful", token });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};

@@ -20,4 +20,17 @@ Content-Type: application/json
 }
 
 ###
+# curl -X POST http://localhost:3000/api/auth/login
+#  -H "Content-Type: application/json"
+#  -d '{"email": "user@example.com", "password": "yourpassword"}'
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user3@example.com",
+  "password": "mypassword123"
+}
+
+###
+
 
