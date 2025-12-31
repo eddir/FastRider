@@ -1,33 +1,33 @@
 # curl -X POST http://localhost:3000/user/register
 #     -H "Content-Type: application/json"
-#     -d '{"email": "user@example.com", "password": "mypassword123"}'
+#     -d '{"phoneNumber": "user@example.com", "password": "mypassword123"}'
 POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
-{"email": "user3@example.com", "password": "mypassword123"}
+{"phoneNumber": "+972123456788", "password": "mypassword123"}
 
 ###
 
 # curl -X POST http://localhost:3000/api/auth/confirm
 #  -H "Content-Type: application/json"
-#  -d '{"email": "user@example.com", "code": "123456"}'
+#  -d '{"phoneNumber": "user@example.com", "code": "123456"}'
 POST http://localhost:3000/api/auth/confirm
 Content-Type: application/json
 
 {
-  "email": "user3@example.com",
-  "code": "612671"
+  "phoneNumber": "+972123456788",
+  "code": "687073"
 }
 
 ###
 # curl -X POST http://localhost:3000/api/auth/login
 #  -H "Content-Type: application/json"
-#  -d '{"email": "user@example.com", "password": "yourpassword"}'
+#  -d '{"phoneNumber": "user@example.com", "password": "yourpassword"}'
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "user3@example.com",
+  "phoneNumber": "+972123456788",
   "password": "mypassword123"
 }
 

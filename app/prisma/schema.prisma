@@ -16,7 +16,7 @@ datasource db {
 
 model User {
   id               Int       @id @default(autoincrement())
-  email            String    @unique
+  phoneNumber      String    @unique
   password         String
   verificationCode String? // 6-digit code
   codeExpiresAt    DateTime? // expiration timestamp

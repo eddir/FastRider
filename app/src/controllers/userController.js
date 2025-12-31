@@ -3,15 +3,14 @@ import prisma from "../utils/prismaClient.js";
 
 export const registerUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { phoneNumber, password } = req.body;
 
-        // Проверяем, существует ли уже пользователь с таким email
         const existingUser = await prisma.user.findUnique({
-            where: { email },
+            where: { phoneNumber },
         });
 
         if (existingUser) {
-            return res.status(400).json({ error: "User with this email already exists" });
+            return res.status(400).json({ error: "User with this phone number already exists" });
         }
 
         const hashed = await hashPassword(password);
@@ -24,14 +23,14 @@ export const registerUser = async (req, res) => {
 
         await prisma.user.create({
             data: {
-                email,
+                phoneNumber,
                 password: hashed,
                 verificationCode,
                 codeExpiresAt,
             },
         });
 
-        console.log(`Verification code for ${email}: ${verificationCode}`);
+        console.log(`Verification code for ${phoneNumber}: ${verificationCode}`);
 
         res.json({ message: "User registered. Check server log for verification code." });
     } catch (err) {
@@ -42,19 +41,19 @@ export const registerUser = async (req, res) => {
 
 export const confirmCode = async (req, res) => {
     try {
-        const { email, code } = req.body;
+        const { phoneNumber, code } = req.body;
 
         const user = await prisma.user.findUnique({
-            where: { email },
+            where: { phoneNumber },
         });
 
         if (!user) {
-            return res.status(400).json({ error: "Invalid email or verification code" });
+            return res.status(400).json({ error: "Invalid phone number or verification code" });
         }
 
         // Check if code matches and is not expired
         if (user.verificationCode !== code) {
-            return res.status(400).json({ error: "Invalid email or verification code" });
+            return res.status(400).json({ error: "Invalid phone number or verification code" });
         }
 
         if (new Date() > user.codeExpiresAt) {
@@ -63,7 +62,7 @@ export const confirmCode = async (req, res) => {
 
         // Mark user as verified and clear code
         await prisma.user.update({
-            where: { email },
+            where: { phoneNumber },
             data: {
                 isVerified: true,
                 verificationCode: null,
@@ -71,7 +70,7 @@ export const confirmCode = async (req, res) => {
             },
         });
 
-        res.json({ message: "Email verified successfully" });
+        res.json({ message: "phoneNumber verified successfully" });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Internal server error" });
@@ -80,30 +79,30 @@ export const confirmCode = async (req, res) => {
 
 export const loginUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { phoneNumber, password } = req.body;
 
-        // Find user by email
+        // Find user by phoneNumber
         const user = await prisma.user.findUnique({
-            where: { email },
+            where: { phoneNumber },
         });
 
         if (!user) {
-            return res.status(400).json({ error: "Invalid email or password" });
+            return res.status(400).json({ error: "Invalid phone number or password" });
         }
 
         // Check password
         const isValid = await comparePasswords(password, user.password);
         if (!isValid) {
-            return res.status(400).json({ error: "Invalid email or password" });
+            return res.status(400).json({ error: "Invalid phone number or password" });
         }
 
         // Optional: check if user has verified their code (if needed)
-        // if (!user.isVerified) {
-        //     return res.status(400).json({ error: "Please verify your email first" });
-        // }
+        if (!user.isVerified) {
+            return res.status(400).json({ error: "Please verify your phone number first" });
+        }
 
         // Generate JWT token
-        const token = generateToken({ userId: user.id, email: user.email });
+        const token = generateToken({ userId: user.id, phoneNumber: user.phoneNumber });
 
         res.json({ message: "Login successful", token });
     } catch (err) {
