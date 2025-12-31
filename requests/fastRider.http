@@ -1,0 +1,40 @@
+# curl -X GET http://localhost:3000/api/fastRider/attractions
+GET http://localhost:3000/api/fastRider/attractions
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwicGhvbmVOdW1iZXIiOiIrOTcyMTIzNDU2Nzg5IiwiaWF0IjoxNzY3MTkyNjY1LCJleHAiOjE3NjcxOTYyNjV9.jQabzIKotwVQ73An1OpQG6JehLfDbyf6dB5D9jMncgU
+
+
+###
+
+# curl -X POST http://localhost:3000/api/fastRider/book
+#  -H "Content-Type: application/json"
+#  -d '{
+#    "userId": 1,
+#    "attractionId": 2
+#  }'
+POST http://localhost:3000/api/fastRider/book
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwicGhvbmVOdW1iZXIiOiIrOTcyMTIzNDU2Nzg5IiwiaWF0IjoxNzY3MTkyNjY1LCJleHAiOjE3NjcxOTYyNjV9.jQabzIKotwVQ73An1OpQG6JehLfDbyf6dB5D9jMncgU
+Content-Type: application/json
+
+{
+  "attractionId": 1
+}
+
+###
+
+# curl -X GET http://localhost:3000/api/fastRider/my-ticket/1
+GET http://localhost:3000/api/fastRider/my-ticket/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwicGhvbmVOdW1iZXIiOiIrOTcyMTIzNDU2Nzg5IiwiaWF0IjoxNzY3MTkyNjY1LCJleHAiOjE3NjcxOTYyNjV9.jQabzIKotwVQ73An1OpQG6JehLfDbyf6dB5D9jMncgU
+
+###
+
+# curl -X POST http://localhost:3000/api/fastRider/cancel
+#  -H "Content-Type: application/json"
+#  -d '{
+#    "userId": 1
+#  }'
+POST http://localhost:3000/api/fastRider/cancel
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwicGhvbmVOdW1iZXIiOiIrOTcyMTIzNDU2Nzg5IiwiaWF0IjoxNzY3MTkyNjY1LCJleHAiOjE3NjcxOTYyNjV9.jQabzIKotwVQ73An1OpQG6JehLfDbyf6dB5D9jMncgU
+Content-Type: application/json
+
+###
+

@@ -21,8 +21,8 @@ async function main() {
     // Attractions
     await prisma.attraction.createMany({
         data: [
+            { name: "Jungle Swing", type: "Ride", waitTime: 15, rating: 4.2, areaId: gibbonIsland.id, supportsFastRider: true },
             { name: "Gibbon Coaster", type: "RollerCoaster", waitTime: 30, rating: 4.8, areaId: gibbonIsland.id },
-            { name: "Jungle Swing", type: "Ride", waitTime: 15, rating: 4.2, areaId: gibbonIsland.id },
             { name: "Capuchin Carousel", type: "Ride", waitTime: 10, rating: 4.0, areaId: capuchinHills.id },
         ],
     });

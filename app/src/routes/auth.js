@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
 
 // Apply rate limiter to auth routes
 router.post("/register", authLimiter, registerUser);
-router.post("/verify", authLimiter, confirmCode);
+router.post("/verify", authLimiter, confirmCode); // TODO: add "send the code again" method
 router.post("/login", authLimiter, loginUser);
 router.get("/profile", authenticate, getProfile);
 

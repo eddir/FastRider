@@ -15,13 +15,14 @@ datasource db {
 }
 
 model User {
-  id               Int       @id @default(autoincrement())
-  phoneNumber      String    @unique
+  id               Int               @id @default(autoincrement())
+  phoneNumber      String            @unique
   password         String
   verificationCode String? // 6-digit code
   codeExpiresAt    DateTime? // expiration timestamp
-  isVerified       Boolean   @default(false)
-  createdAt        DateTime  @default(now())
+  isVerified       Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  fastRiderTickets FastRiderTicket[]
 }
 
 model Area {
@@ -34,13 +35,19 @@ model Area {
 }
 
 model Attraction {
-  id       Int    @id @default(autoincrement())
-  name     String
-  type     String // e.g., RollerCoaster, Ride, Show
-  waitTime Int? // in minutes
-  rating   Float?
-  area     Area   @relation(fields: [areaId], references: [id])
-  areaId   Int
+  id                Int               @id @default(autoincrement())
+  name              String
+  type              String // e.g., RollerCoaster, Ride, Show
+  waitTime          Int? // in minutes
+  rating            Float?
+  area              Area              @relation(fields: [areaId], references: [id])
+  areaId            Int
+  supportsFastRider Boolean           @default(false)
+  openTime          DateTime          @default("2025-01-01T09:00:00Z")
+  closeTime         DateTime          @default("2025-01-01T19:00:00Z")
+  slotSizeMinutes   Int               @default(30)
+  ticketsPerDay     Int               @default(100)
+  FastRiderTicket   FastRiderTicket[]
 }
 
 model FoodStand {
@@ -59,4 +66,16 @@ model Restaurant {
   rating  Float?
   area    Area   @relation(fields: [areaId], references: [id])
   areaId  Int
+}
+
+model FastRiderTicket {
+  id           Int        @id @default(autoincrement())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int
+  attraction   Attraction @relation(fields: [attractionId], references: [id])
+  attractionId Int
+  slotStart    DateTime
+  slotEnd      DateTime
+  createdAt    DateTime   @default(now())
+  cancelledAt  DateTime?
 }
