@@ -370,4 +370,57 @@ Once you confirm this is working, **Step 2** will focus on **creating the user m
 
 Do you want me to continue with Step 2?
 
+let's add rate limiter to auth methods
+
+import express from "express";
+import {confirmCode, loginUser, registerUser} from "../controllers/userController.js";
+
+const router = express.Router();
+
+router.get("/", (req, res) => {
+res.send("FastRider API is running");
+});
+router.post("/register", registerUser);
+router.post("/confirm", confirmCode);
+router.post("/login", loginUser);
+
+export default router;
+
+We can integrate a rate limiter using the [`express-rate-limit`](https://www.npmjs.com/package/express-rate-limit) package. This will protect your `/register`, `/confirm`, and `/login` endpoints from brute-force attacks. Here's an example of how to do it:
+
+```js
+import express from "express";
+import rateLimit from "express-rate-limit";
+import { confirmCode, loginUser, registerUser } from "../controllers/userController.js";
+
+const router = express.Router();
+
+// Rate limiter configuration
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // limit each IP to 5 requests per windowMs
+    message: {
+        status: 429,
+        message: "Too many requests, please try again later."
+    },
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false,   // Disable the `X-RateLimit-*` headers
+});
+
+// Routes
+router.get("/", (req, res) => {
+    res.send("FastRider API is running");
+});
+
+// Apply rate limiter to auth routes
+router.post("/register", authLimiter, registerUser);
+router.post("/confirm", authLimiter, confirmCode);
+router.post("/login", authLimiter, loginUser);
+
+export default router;
+```
+
+✅ This will limit each IP to **5 requests per 15 minutes** for all auth endpoints.
+
+If you want, we can also make **different limits per endpoint** (e.g., `/login` stricter than `/register`) to make it even safer. Do you want me to do that?
 
