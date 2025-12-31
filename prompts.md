@@ -114,7 +114,7 @@ my-backend/
 │  ├─ src/
 │  │  ├─ index.js       # Entry point (Express server)
 │  │  ├─ routes/
-│  │  │  └─ user.js     # Example API route
+│  │  │  └─ auth.js     # Example API route
 │  │  ├─ controllers/
 │  │  │  └─ userController.js
 │  │  ├─ services/
@@ -170,7 +170,7 @@ DATABASE_URL="postgresql://postgres:postgres@db:5432/mydb?schema=public"
 ```js
 import express from "express";
 import dotenv from "dotenv";
-import userRouter from "./routes/user.js";
+import userRouter from "./routes/auth.js";
 
 dotenv.config();
 
@@ -185,7 +185,7 @@ app.listen(PORT, () => {
 });
 ```
 
-6. **Example route (`src/routes/user.js`)**
+6. **Example route (`src/routes/auth.js`)**
 
 ```js
 import express from "express";

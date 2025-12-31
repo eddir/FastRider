@@ -1,9 +1,0 @@
-# curl -X POST http://localhost:3000/user/register
-#     -H "Content-Type: application/json"
-#     -d '{"email": "user@example.com", "password": "mypassword123"}'
-POST http://localhost:3000/users/register
-Content-Type: application/json
-
-{"email": "user2@example.com", "password": "mypassword123"}
-
-###

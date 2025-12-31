@@ -18,7 +18,8 @@ model User {
   id               Int       @id @default(autoincrement())
   email            String    @unique
   password         String
-  verificationCode String? // will store the 6-digit code
+  verificationCode String? // 6-digit code
   codeExpiresAt    DateTime? // expiration timestamp
+  isVerified       Boolean   @default(false)
   createdAt        DateTime  @default(now())
 }
