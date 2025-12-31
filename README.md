@@ -1,6 +1,6 @@
 # FastRider Auth Service (Docker Setup)
 
-FastRider Auth Service is a microservice for secure user registration, code verification, and authentication. Built with Node.js, Prisma, PostgreSQL, and JWT, it demonstrates modern authentication and security best practices.
+FastRider Auth Service is a microservice for secure user registration, code verification, authentication, and FastRider ticket management. Built with Node.js, Prisma, PostgreSQL, and JWT.
 
 ---
 
@@ -11,7 +11,7 @@ FastRider Auth Service is a microservice for secure user registration, code veri
 ```bash
 git clone https://github.com/your-repo/fastrider-auth.git
 cd fastrider-auth
-```
+````
 
 2. Create a `.env` file with environment variables:
 
@@ -35,10 +35,19 @@ docker compose up --build
 
 ## ⚡ API Endpoints
 
+### Authentication
+
 * `POST /register` — user registration (email/phone, password)
 * `POST /verify` — code verification
 * `POST /login` — login
 * `GET /profile` — user profile (requires JWT token)
+
+### FastRider Ticket Management
+
+* `GET /attractions` — list all attractions that support FastRider (requires authentication)
+* `POST /book` — book nearest available FastRider ticket (requires authentication)
+* `GET /my-ticket/:userId` — get user's active FastRider ticket (requires authentication)
+* `POST /cancel` — cancel active FastRider ticket (requires authentication)
 
 ---
 
@@ -61,3 +70,13 @@ docker compose up --build
 * JWT for authentication
 * Bcrypt for password hashing
 * Docker + Docker Compose for containerization
+
+---
+
+## 🧪 Running Tests
+
+To run tests inside the Docker container:
+
+```bash
+docker compose exec -it app npm run test
+```
