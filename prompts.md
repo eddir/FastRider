@@ -255,3 +255,119 @@ npx prisma migrate dev --name init
 If you want, I can make a **ready-to-run GitHub-style starter** with Docker, Express, Prisma, and a minimal custom authentication system. You’d just `docker-compose up` and it would work immediately.
 
 Do you want me to do that?
+
+
+Let's continue with our FastRider API!
+
+User Registration & Login
+• Users register using their name and a unique verification code sent via SMS.
+• Important: For the purpose of this exercise, you don’t need to send real SMS
+messages. Instead, generate the code and print it to the server logs.
+• The authentication system must be designed and implemented by you: You may NOT
+use end-to-end identity providers such as Auth0, Firebase Auth, Cognito, etc. You may
+use cryptography, JWT, session handling, password hashing libraries, etc.
+• Your design should demonstrate awareness of security concerns such as:
+o Code expiration
+o Rate limiting
+o Replay protection
+o Secure token generation
+o User session integrity
+• You may include guiding notes in the README explaining your decisions.
+
+Break this down into step by step guide. Srart with the first step
+
+
+
+Perfect! Let’s break this down into a clear step-by-step plan. We’ll start with **Step 1** and build it gradually.
+
+---
+
+### **Step 1: Set up the project structure**
+
+Before we dive into authentication logic, we need a proper Node.js project setup with a framework and basic structure.
+
+**1.1 Initialize Node.js project**
+
+```bash
+mkdir fast-rider-api
+cd fast-rider-api
+npm init -y
+```
+
+**1.2 Install necessary dependencies**
+We’ll need:
+
+* `express` → web framework
+* `jsonwebtoken` → JWT token handling
+* `bcrypt` → password/code hashing
+* `dotenv` → manage environment variables
+* `prisma` → ORM for database (you already have it)
+* `cors` → allow cross-origin requests if needed
+
+```bash
+npm install express jsonwebtoken bcrypt dotenv cors
+npm install prisma --save-dev
+npx prisma init
+```
+
+**1.3 Set up basic folder structure**
+
+```
+fast-rider-api/
+├─ prisma/
+│  └─ schema.prisma
+├─ src/
+│  ├─ controllers/
+│  ├─ middlewares/
+│  ├─ routes/
+│  └─ server.js
+├─ .env
+└─ package.json
+```
+
+**1.4 Configure `.env` file**
+Example:
+
+```
+PORT=3000
+JWT_SECRET=your_super_secret_key
+CODE_EXPIRATION_MINUTES=5
+```
+
+**1.5 Set up basic Express server**
+`src/server.js`:
+
+```javascript
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("FastRider API is running");
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+```
+
+✅ At this point, your project is structured and a server is running. You can test with:
+
+```bash
+node src/server.js
+```
+
+and visiting `http://localhost:3000/`.
+
+---
+
+Once you confirm this is working, **Step 2** will focus on **creating the user model in the database with Prisma** so we can store users and verification codes securely.
+
+Do you want me to continue with Step 2?
+
+
