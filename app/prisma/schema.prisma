@@ -23,3 +23,40 @@ model User {
   isVerified       Boolean   @default(false)
   createdAt        DateTime  @default(now())
 }
+
+model Area {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  attractions Attraction[]
+  foodStands  FoodStand[]
+  restaurants Restaurant[]
+}
+
+model Attraction {
+  id       Int    @id @default(autoincrement())
+  name     String
+  type     String // e.g., RollerCoaster, Ride, Show
+  waitTime Int? // in minutes
+  rating   Float?
+  area     Area   @relation(fields: [areaId], references: [id])
+  areaId   Int
+}
+
+model FoodStand {
+  id     Int    @id @default(autoincrement())
+  name   String
+  type   String // e.g., Snack, Ice Cream, Drinks
+  rating Float?
+  area   Area   @relation(fields: [areaId], references: [id])
+  areaId Int
+}
+
+model Restaurant {
+  id      Int    @id @default(autoincrement())
+  name    String
+  cuisine String
+  rating  Float?
+  area    Area   @relation(fields: [areaId], references: [id])
+  areaId  Int
+}

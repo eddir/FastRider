@@ -424,3 +424,275 @@ export default router;
 
 If you want, we can also make **different limits per endpoint** (e.g., `/login` stricter than `/register`) to make it even safer. Do you want me to do that?
 
+May I ask you to write the code in controller?
+
+Absolutely! Let’s move the logic from the routes into a **controller structure**. This keeps your code clean and separates concerns nicely. I’ll structure it for **areas, attractions, food stands, restaurants, and search**.
+
+---
+
+## **1. Create the Controller File**
+
+```js
+// src/controllers/parkController.js
+import prisma from "../utils/prismaClient.js";
+
+/* -------------------- Areas -------------------- */
+export const getAllAreas = async (req, res) => {
+  try {
+    const areas = await prisma.area.findMany();
+    res.json(areas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getAreaById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const area = await prisma.area.findUnique({
+      where: { id: parseInt(id) },
+      include: { attractions: true, foodStands: true, restaurants: true },
+    });
+
+    if (!area) return res.status(404).json({ error: "Area not found" });
+    res.json(area);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+/* -------------------- Attractions -------------------- */
+export const getAttractions = async (req, res) => {
+  try {
+    const { areaId, type, minRating, sort } = req.query;
+
+    const attractions = await prisma.attraction.findMany({
+      where: {
+        areaId: areaId ? parseInt(areaId) : undefined,
+        type: type || undefined,
+        rating: minRating ? { gte: parseFloat(minRating) } : undefined,
+      },
+      orderBy: sort ? { [sort]: "asc" } : undefined,
+    });
+
+    res.json(attractions);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getAttractionById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const attraction = await prisma.attraction.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!attraction) return res.status(404).json({ error: "Attraction not found" });
+    res.json(attraction);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+/* -------------------- Food Stands -------------------- */
+export const getFoodStands = async (req, res) => {
+  try {
+    const { areaId, type, minRating, sort } = req.query;
+
+    const stands = await prisma.foodStand.findMany({
+      where: {
+        areaId: areaId ? parseInt(areaId) : undefined,
+        type: type || undefined,
+        rating: minRating ? { gte: parseFloat(minRating) } : undefined,
+      },
+      orderBy: sort ? { [sort]: "asc" } : undefined,
+    });
+
+    res.json(stands);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getFoodStandById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const stand = await prisma.foodStand.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!stand) return res.status(404).json({ error: "Food stand not found" });
+    res.json(stand);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+/* -------------------- Restaurants -------------------- */
+export const getRestaurants = async (req, res) => {
+  try {
+    const { areaId, cuisine, minRating, sort } = req.query;
+
+    const restaurants = await prisma.restaurant.findMany({
+      where: {
+        areaId: areaId ? parseInt(areaId) : undefined,
+        cuisine: cuisine || undefined,
+        rating: minRating ? { gte: parseFloat(minRating) } : undefined,
+      },
+      orderBy: sort ? { [sort]: "asc" } : undefined,
+    });
+
+    res.json(restaurants);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getRestaurantById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const restaurant = await prisma.restaurant.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!restaurant) return res.status(404).json({ error: "Restaurant not found" });
+    res.json(restaurant);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+/* -------------------- Search -------------------- */
+export const searchParkItems = async (req, res) => {
+  try {
+    const { q, type, areaId } = req.query;
+    let results = [];
+
+    if (!type || type === "attraction") {
+      const attractions = await prisma.attraction.findMany({
+        where: {
+          name: { contains: q, mode: "insensitive" },
+          areaId: areaId ? parseInt(areaId) : undefined,
+        },
+      });
+      results.push(...attractions.map(a => ({ ...a, type: "attraction" })));
+    }
+
+    if (!type || type === "foodStand") {
+      const stands = await prisma.foodStand.findMany({
+        where: {
+          name: { contains: q, mode: "insensitive" },
+          areaId: areaId ? parseInt(areaId) : undefined,
+        },
+      });
+      results.push(...stands.map(s => ({ ...s, type: "foodStand" })));
+    }
+
+    if (!type || type === "restaurant") {
+      const restaurants = await prisma.restaurant.findMany({
+        where: {
+          name: { contains: q, mode: "insensitive" },
+          areaId: areaId ? parseInt(areaId) : undefined,
+        },
+      });
+      results.push(...restaurants.map(r => ({ ...r, type: "restaurant" })));
+    }
+
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+```
+
+---
+
+## **2. Routes File (Using Controller)**
+
+```js
+// src/routes/parkRoutes.js
+import express from "express";
+import * as parkController from "../controllers/parkController.js";
+
+const router = express.Router();
+
+// Areas
+router.get("/areas", parkController.getAllAreas);
+router.get("/areas/:id", parkController.getAreaById);
+
+// Attractions
+router.get("/attractions", parkController.getAttractions);
+router.get("/attractions/:id", parkController.getAttractionById);
+
+// Food Stands
+router.get("/food-stands", parkController.getFoodStands);
+router.get("/food-stands/:id", parkController.getFoodStandById);
+
+// Restaurants
+router.get("/restaurants", parkController.getRestaurants);
+router.get("/restaurants/:id", parkController.getRestaurantById);
+
+// Search
+router.get("/search", parkController.searchParkItems);
+
+export default router;
+```
+
+---
+
+This way your **routes stay clean**, and all the logic lives in the controller.
+
+If you want, I can **add optional pagination and caching** inside the controller next — that will make your API faster and safer for large datasets.
+
+Do you want me to do that?
+
+Seems like we need more then one controller, you don't think?
+
+Exactly — with all the different entities (areas, attractions, food stands, restaurants, search) it makes sense to split them into **multiple controllers**. This keeps each controller focused, makes the code easier to maintain, and helps with scalability as features grow.
+
+Here’s a clean way to split it:
+
+---
+
+## **Suggested Controllers**
+
+1. **AreaController**
+
+    * `getAllAreas`
+    * `getAreaById`
+
+2. **AttractionController**
+
+    * `getAttractions`
+    * `getAttractionById`
+
+3. **FoodStandController**
+
+    * `getFoodStands`
+    * `getFoodStandById`
+
+4. **RestaurantController**
+
+    * `getRestaurants`
+    * `getRestaurantById`
+
+5. **SearchController**
+
+    * `searchParkItems`
+
+---
+
+## **Benefits**
+
+* Each controller file is small and readable.
+* Easy to add specific logic per entity later (like caching, special filters, or permissions).
+* Easier to test each controller separately.
+* Routes files can stay clean and just import the right controller.
+
+---
+
+If you want, I can **refactor your current single `parkController.js` into 5 separate controller files** and adjust the routes to match. This will make your FastRider API much cleaner and professional.
+
+Do you want me to do that?
+

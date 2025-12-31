@@ -1,0 +1,70 @@
+# curl -X GET http://localhost:3000/api/park/areas
+GET http://localhost:3000/api/park/areas
+
+###
+
+# curl -X GET http://localhost:3000/api/park/areas/1
+GET http://localhost:3000/api/park/areas/1
+
+###
+
+# curl -X GET http://localhost:3000/api/park/attractions
+GET http://localhost:3000/api/park/attractions
+
+###
+
+# curl -X GET "http://localhost:3000/api/park/attractions?areaId=1&type=RollerCoaster&minRating=4&sort=waitTime"
+GET http://localhost:3000/api/park/attractions?areaId=1&type=RollerCoaster&minRating=4&sort=waitTime
+
+###
+
+# curl -X GET http://localhost:3000/api/park/attractions/2
+GET http://localhost:3000/api/park/attractions/2
+
+###
+
+# curl -X GET http://localhost:3000/api/park/food-stands
+GET http://localhost:3000/api/park/food-stands
+
+###
+
+# curl -X GET "http://localhost:3000/api/park/food-stands?areaId=1&type=Snack&minRating=3&sort=rating"
+GET http://localhost:3000/api/park/food-stands?areaId=1&type=Snack&minRating=3&sort=rating
+
+###
+
+# curl -X GET http://localhost:3000/api/park/food-stands/1
+GET http://localhost:3000/api/park/food-stands/1
+
+###
+
+# curl -X GET http://localhost:3000/api/park/restaurants
+GET http://localhost:3000/api/park/restaurants
+
+###
+
+# curl -X GET "http://localhost:3000/api/park/restaurants?areaId=2&cuisine=Italian&minRating=4&sort=rating"
+GET http://localhost:3000/api/park/restaurants?areaId=2&cuisine=Italian&minRating=4&sort=rating
+
+###
+
+# curl -X GET http://localhost:3000/api/park/restaurants/3
+GET http://localhost:3000/api/park/restaurants/2
+
+###
+
+# curl -X GET "http://localhost:3000/api/park/search?q=Ice%20Cream"
+GET http://localhost:3000/api/park/search?q=Ice%20Cream
+
+###
+
+# curl -X GET "http://localhost:3000/api/park/search?q=Coaster&type=attraction&areaId=1"
+GET http://localhost:3000/api/park/search?q=Coaster&type=attraction&areaId=1
+
+###
+
+# curl -X GET "http://localhost:3000/api/park/search?q=Pizza&type=restaurant"
+GET http://localhost:3000/api/park/search?q=Diner&type=restaurant
+
+###
+
