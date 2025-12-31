@@ -1,4 +1,4 @@
-# FastRider Auth Service (Docker Setup)
+**# FastRider Auth Service (Docker Setup)
 
 FastRider Auth Service is a microservice for secure user registration, code verification, authentication, and FastRider ticket management. Built with Node.js, Prisma, PostgreSQL, and JWT.
 
@@ -37,6 +37,14 @@ docker compose up --build
 docker compose exec -it app npm run seed
 ```
 ---
+
+## 🧪 Running Tests
+
+To run tests inside the Docker container:
+
+```bash
+docker compose exec -it app npm run test
+```
 
 ## ⚡ API Endpoints
 
@@ -78,10 +86,18 @@ docker compose exec -it app npm run seed
 
 ---
 
-## 🧪 Running Tests
+## 🤖 Use of AI
 
-To run tests inside the Docker container:
+This project was developed with the assistance of **ChatGPT (GPT-5.2)** as an AI engineering assistant.
 
-```bash
-docker compose exec -it app npm run test
-```
+ChatGPT was used to:
+
+* Design the project structure and service architecture
+* Select frameworks, libraries, and development tools
+* Assist with learning Node.js (the author had JavaScript experience but was new to Node.js)
+* Help implement authentication flows and FastRider business logic
+* Debug errors and improve code quality and security practices
+
+All final technical decisions and code were reviewed and approved by the author.
+
+For transparency, example prompts used during development can be found in **`prompts.md`**.

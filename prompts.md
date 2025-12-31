@@ -1,4 +1,4 @@
-Nice. I have never try node.js . It's my very first time. My goal is to make a backend api application. Here is the requirements:
+I have never try node.js . It's my very first time. My goal is to make a backend api application. Here is the requirements:
 
 Backend
 • Node.js
