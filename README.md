@@ -13,7 +13,7 @@ git clone https://github.com/your-repo/fastrider-auth.git
 cd fastrider-auth
 ````
 
-2. Create a `.env` file with environment variables:
+2. Create a `.env` file with environment variables in `app` folder:
 
 ```
 DATABASE_URL=postgresql://user:password@db:5432/dbname
@@ -31,6 +31,11 @@ docker compose up --build
 
 * API: `http://localhost:3000`
 
+5. You might want to run the database seeder:
+
+```bash
+docker compose exec -it app npm run seed
+```
 ---
 
 ## ⚡ API Endpoints
